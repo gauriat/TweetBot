@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TweetWise</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+            background-color: #78ABA8; /* Set a light neutral background color */
+        }
+        .container {
+            max-width: 600px;
+            background-color: #F1F8E8; /* Set a white background for the main content */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Optional: Add a subtle shadow */
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">TweetWise</h1>
+        <hr>
+        <!-- Sentiment Analysis Section -->
+        <div class="form-group">
+            <label for="sentiment-input">Enter text for Sentiment Analysis:</label>
+            <input type="text" class="form-control" id="sentiment-input" placeholder="Type your text here">
+            <button class="btn btn-primary mt-2" onclick="predictSentiment()">Analyze Sentiment</button>
+        </div>
+        <div id="sentiment-result" class="result" style="display: none;"></div>
+
+        <hr>
+        <!-- Tweet Generation Section -->
+        <div class="form-group">
+            <label for="tweet-topic">Enter topic for Tweet Generation:</label>
+            <input type="text" class="form-control" id="tweet-topic" placeholder="Type your topic here">
+            <label for="tweet-sentiment">Enter sentiment for the tweet (positive/negative):</label>
+            <input type="text" class="form-control" id="tweet-sentiment" placeholder="Type sentiment here">
+            <button class="btn btn-primary mt-2" onclick="generateTweet()">Generate Tweet</button>
+        </div>
+        <div id="tweet-result" class="result" style="display: none;"></div>
+
+        <hr>
+        <!-- Reply Generation Section -->
+        <div class="form-group">
+            <label for="reply-tweet">Enter tweet to generate a reply:</label>
+            <input type="text" class="form-control" id="reply-tweet" placeholder="Type the tweet here">
+            <button class="btn btn-primary mt-2" onclick="generateReply()">Generate Reply</button>
+        </div>
+        <div id="reply-result" class="result" style="display: none;"></div>
+    </div>
+
+    <!-- Script to handle API calls and update results -->
+    <script>
+        async function predictSentiment() {
+            const inputText = document.getElementById('sentiment-input').value;
+            const response = await fetch('/predict_sentiment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text: inputText }),
+            });
+            const data = await response.json();
+            const resultDiv = document.getElementById('sentiment-result');
+            if (data.sentiment) {
+                resultDiv.textContent = `Sentiment: ${data.sentiment}`;
+            } else {
+                resultDiv.textContent = `Error: ${data.error}`;
+            }
+            resultDiv.style.display = 'block';
+        }
+
+        async function generateTweet() {
+            const topic = document.getElementById('tweet-topic').value;
+            const sentiment = document.getElementById('tweet-sentiment').value;
+            const response = await fetch('/generate_tweet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ topic: topic, sentiment: sentiment }),
+            });
+            const data = await response.json();
+            const resultDiv = document.getElementById('tweet-result');
+            if (data.tweet) {
+                resultDiv.textContent = `Generated Tweet: ${data.tweet}`;
+            } else {
+                resultDiv.textContent = `Error: ${data.error}`;
+            }
+            resultDiv.style.display = 'block';
+        }
+
+        async function generateReply() {
+            const tweet = document.getElementById('reply-tweet').value;
+            const response = await fetch('/generate_reply', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ tweet: tweet }),
+            });
+            const data = await response.json();
+            const resultDiv = document.getElementById('reply-result');
+            if (data.reply) {
+                resultDiv.textContent = `Generated Reply: ${data.reply}`;
+            } else {
+                resultDiv.textContent = `Error: ${data.error}`;
+            }
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
