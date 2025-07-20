@@ -59,7 +59,8 @@ It leverages cutting-edge transformer models like **BERT**, **GPT-2**, and **BAR
 ## 📫 Contact
 
 - **Gauri Thambkar**  
-  [LinkedIn]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/gauri-thambkar-6b616126a/))
+  [LinkedIn]((https://www.linkedin.com/in/gauri-thambkar-6b616126a/))
+  
   [Email](mailto:gaurithambkar@gmail.com)  
 - GitHub: [github.com/gauriat]((https://github.com/gauriat))
 
